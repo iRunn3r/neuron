@@ -15,4 +15,4 @@ with open('predictions.txt', 'w') as out_file:
             case.update({"probability": prediction[0][0][1]})
         else:
             case.update({"probability": 1 - prediction[0][0][1]})
-        out_file.write(' '.join([case['number'], case['probability']]))
+        out_file.write(' '.join([case['number'], str(case['probability']) + '\n']))
