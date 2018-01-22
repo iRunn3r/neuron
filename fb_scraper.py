@@ -10,15 +10,24 @@ class FBCollector:
         self.__fb = FogBugz(self.__login_data['address'], self.__login_data['token'], api_version=9)
         self.__cl = Cleaner()
         self.__criteria = 'ixBug,sStatus,sOriginalTitle,sCategory,events'
-        self.__bug_query = '(case:"{}...{}" AND rating:"0...5" AND category:"bug" AND (status:"Fixed" OR status:"Duplicate" OR status:"postponed"))'
-        self.__incident_query = '(case:"{}...{}" AND rating:"0...5" AND category:"qa Incoming Incident" AND -status:"duplicate" AND status:"closed" )'
 
-    def collect(self, outfile, search_bounds, query_step=1000):
+    def simple_search(self, query):
+        result = []
+        resp = self.__fb.search(q=query, cols=self.__criteria)
+        for case in resp.cases.childGenerator():
+            entry = self.__cl.clean(case)
+            result.append(entry)
+        return result
+
+    def bounded_search(self, queries, search_bounds, query_step, outfile):
         with open(outfile, 'w') as out_file:
             for lower_bound in range(search_bounds[0], search_bounds[1], 1000):
                 upper_bound = lower_bound + query_step
-                final_query = self.__bug_query.format(lower_bound, upper_bound) + " OR " + self.__incident_query.format(lower_bound, upper_bound)
-                resp = self.__fb.search(q=final_query, cols=self.__criteria)
-                for case in resp.cases.childGenerator():
-                    entry = self.__cl.clean(case)
-                    out_file.write(' '.join(('__label__' + entry['status'], entry['title'] + '.', entry['body'], '\n')))
+                q = []
+                for query in queries:
+                    q.append(query.format(lower_bound, upper_bound))
+                query = ' OR '.join(q)
+                response = self.simple_search(query)
+                print(len(response))
+                for case in response:
+                    out_file.write(' '.join(('__label__' + case['status'], case['title'] + '.', case['body'], '\n')))
