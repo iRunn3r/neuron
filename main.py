@@ -2,7 +2,7 @@ import fasttext
 from fb_scraper import FBCollector
 import os.path
 
-collect_data = True    # True if new data from FogBugz should be collected. Existing data will be used otherwise
+collect_data = False    # True if new data from FogBugz should be collected. Existing data will be used otherwise
 training = True     # True if a new model should be trained. An existing model will be used otherwise
 bug_query = '(case:"{}...{}" AND rating:"0...5" AND category:"bug" AND (status:"Fixed" OR status:"Duplicate" OR status:"postponed"))'
 incident_query = '(case:"{}...{}" AND rating:"0...5" AND category:"qa Incoming Incident" AND -status:"duplicate" AND status:"closed" )'
