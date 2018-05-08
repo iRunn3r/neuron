@@ -10,7 +10,7 @@ incident_query = '(case:"{}...{}" AND rating:"0...5" AND category:"qa Incoming I
 if collect_data or not os.path.isfile('train.txt') or not os.path.isfile('test.txt'):
     collector = FBCollector()
     print('Hold on, collecting FogBugz case data...')
-    collector.bounded_search([bug_query, incident_query], (800000, 980000), 1000, 'train.txt')
+    collector.bounded_search([bug_query, incident_query], (800000, 1033750), 1000, 'train.txt')
     collector.bounded_search([bug_query, incident_query], (980000, 981000), 1000, 'test.txt')
 
 if training or not os.path.isfile('model.bin'):
