@@ -5,3 +5,4 @@ train.txt
 test.txt
 model.bin
 predictions.txt
+venv/

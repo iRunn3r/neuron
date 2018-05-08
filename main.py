@@ -1,4 +1,4 @@
-import fasttext
+import fastText
 from fb_scraper import FBCollector
 import os.path
 
@@ -15,10 +15,10 @@ if collect_data or not os.path.isfile('train.txt') or not os.path.isfile('test.t
 
 if training or not os.path.isfile('model.bin'):
     print('Training classifier...')
-    classifier = fasttext.supervised('train.txt', 'model')
+    classifier = fastText.supervised('train.txt', 'model')
     print('Done!')
 else:
-    classifier = fasttext.load_model('model.bin')
+    classifier = fastText.load_model('model.bin')
 
 testing = classifier.test('test.txt', 1)
 
