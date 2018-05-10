@@ -3,6 +3,8 @@ import re
 import os
 from case import Case
 import math
+import pickle
+import data
 
 
 class FB:
@@ -63,6 +65,8 @@ class FB:
             for case in found_cases:
                 entry = self.collect_info(case)
                 result.append(entry)
+            with open(os.path.join(data.PROJECT_ROOT, 'temp.pkl'), 'w+b') as f:
+                pickle.dump(result, f)
             print('Total cases found: {}'.format(len(result)))
             bottom_bound = top_bound
         return result
