@@ -1,0 +1,3 @@
+recursive-include neuron *.yaml
+include LICENSE.md
+include requirements.txt
