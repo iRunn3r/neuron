@@ -7,13 +7,17 @@ __DATA_FILE = os.path.join(PROJECT_ROOT, 'data.yaml')
 
 
 def get(name: str):
-    with open(__DATA_FILE, 'r') as f:
-        data = yaml.load(f)
-        if name in data:
-            return data[name]
-        else:
-            print('Value {} was not found in data file.'.format(name))
-            return None
+    if os.path.isfile(__DATA_FILE):
+        with open(__DATA_FILE, 'r') as f:
+            data = yaml.load(f)
+            if name in data:
+                return data[name]
+            else:
+                print('Value {} was not found in data file.'.format(name))
+                return None
+    else:
+        print('Data file not found at {}'.format(__DATA_FILE))
+        return None
 
 
 def write(name: str, value):
