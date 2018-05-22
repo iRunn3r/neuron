@@ -6,3 +6,4 @@ venv/
 *.text
 /dist
 /build
+*.pkl

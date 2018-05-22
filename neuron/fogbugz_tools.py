@@ -41,9 +41,9 @@ class FB:
         status = self.get_status(case.sCategory.text)
         return Case(number, status, title, body)
 
-    def search(self, query, columns=None):
+    def search(self, query, columns=None, max_results=5000):
         result = []
-        resp = self.__fogbugz.search(q=query, cols=columns if columns else self.criteria, max=5000)
+        resp = self.__fogbugz.search(q=query, cols=columns if columns else self.criteria, max=max_results)
         for case in resp.cases.childGenerator():
             entry = self.collect_info(case)
             result.append(entry)
