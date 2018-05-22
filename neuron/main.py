@@ -64,5 +64,6 @@ for case in day_0_cases:
     else:
         probability = prediction[1][0]
     predictions.append([case.number, abs(int(probability * 100)), case.title])
+print(datetime.datetime.now())
 predictions.sort(key=lambda x: x[1], reverse=True)
 HTML.create_table(predictions)
