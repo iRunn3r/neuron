@@ -11,7 +11,7 @@ MODEL_NAME = 'model.bin'
 TRAINING_FILE = 'training.text'
 TESTING_FILE = 'testing.text'
 COLLECT_TRAINING = False
-COLLECT_TESTING = True
+COLLECT_TESTING = False
 TRAIN_MODEL = False
 fb = FB()
 ft = FT()
@@ -22,7 +22,7 @@ day_0_query = 'assignedTo:"qa Incoming" AND status:"active (new)" and (Version:\
               'or Version:\'2018.*\' and opened:”6/26/2017..”)'
 
 LOW_BOUND = 800000
-HIGH_BOUND = 1050000
+HIGH_BOUND = 1068000
 SEARCH_STEP = 1000
 
 if COLLECT_TRAINING:
@@ -33,14 +33,16 @@ if COLLECT_TRAINING:
         start_time = int(time.time())
         found_bugs = fb.search(bug_query.format(i, i + SEARCH_STEP), max_results=SEARCH_STEP)
         found_incidents = fb.search(incident_query.format(i, i + SEARCH_STEP), max_results=len(found_bugs))
-        print('Found bugs/incidents: {}/{}. Search bounds: {}-{}. Estimated time remaining: {}.'.format(len(found_bugs), len(found_incidents), i, i + SEARCH_STEP, remaining_time), end='\r')
+        print('Found bugs/incidents: {}/{}. Search bounds: {}-{}. Estimated time remaining: {}.'.format(len(found_bugs), len(found_incidents), i, i + SEARCH_STEP, remaining_time))
         total_found = found_bugs + found_incidents
         training_cases += total_found
         with open(os.path.join(data.PROJECT_ROOT, 'temp.pkl'), 'w+b') as f:
             pickle.dump(training_cases, f)
         end_time = int(time.time())
         iteration_durations.append(end_time-start_time)
-        remaining_time = str(datetime.timedelta(seconds=(sum(iteration_durations) / len(iteration_durations))))
+        remaining_iterations = (HIGH_BOUND - i) / SEARCH_STEP
+        remaining_time = str(datetime.timedelta(seconds=(sum(iteration_durations) / len(iteration_durations) * remaining_iterations)))
+
     training_file = ft.preprocess(training_cases, outfile=TRAINING_FILE)
     model = ft.train(training_file)
 else:

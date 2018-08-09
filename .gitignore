@@ -7,3 +7,6 @@ venv/
 /dist
 /build
 *.pkl
+!neuron/table_template.html
+*.html
+*.log
